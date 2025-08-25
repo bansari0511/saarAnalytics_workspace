@@ -43,6 +43,48 @@ async function mockNewsDetails(userId, reqId, docId) {
           <p>This is a test paragraph mentioning Apple and banana.</p>
         </li>
       </ul>
+      <h2>Why Choose Us?</h2>
+      <ul>
+        <li><strong>User-Friendly:</strong> Simple interfaces designed for everyone.</li>
+        <li><strong>Reliable:</strong> Backed by modern infrastructure with 99.9% uptime.</li>
+        <li><strong>Scalable:</strong> Grows with your business — from startup to enterprise.</li>
+        <li><strong>Supportive:</strong> 24/7 customer support and an active community forum.</li>
+      </ul>
+
+      <h2>Getting Started</h2>
+      <p>
+        To begin, sign up for a free account and explore our quick-start guides in the documentation center.
+        We also offer onboarding support for teams and enterprises.
+      </p>
+
+      <h2>Why Choose Us?</h2>
+      <ul>
+        <li><strong>User-Friendly:</strong> Simple interfaces designed for everyone.</li>
+        <li><strong>Reliable:</strong> Backed by modern infrastructure with 99.9% uptime.</li>
+        <li><strong>Scalable:</strong> Grows with your business — from startup to enterprise.</li>
+        <li><strong>Supportive:</strong> 24/7 customer support and an active community forum.</li>
+      </ul>
+
+      <h2>Getting Started</h2>
+      <p>
+        To begin, sign up for a free account and explore our quick-start guides in the documentation center.
+        We also offer onboarding support for teams and enterprises.
+      </p>
+
+      <h2>Why Choose Us?</h2>
+      <ul>
+        <li><strong>User-Friendly:</strong> Simple interfaces designed for everyone.</li>
+        <li><strong>Reliable:</strong> Backed by modern infrastructure with 99.9% uptime.</li>
+        <li><strong>Scalable:</strong> Grows with your business — from startup to enterprise.</li>
+        <li><strong>Supportive:</strong> 24/7 customer support and an active community forum.</li>
+      </ul>
+
+      <h2>Getting Started</h2>
+      <p>
+        To begin, sign up for a free account and explore our quick-start guides in the documentation center.
+        We also offer onboarding support for teams and enterprises.
+      </p>
+
     `,
     highlights: ['User-Friendly', 'Reliable', 'Scalable','Supportive'],
     entities: [

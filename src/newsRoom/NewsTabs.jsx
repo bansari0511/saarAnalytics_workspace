@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import {
-  Box, Tabs, Tab, Paper, Typography, Grid, Pagination,
-  useTheme, useMediaQuery, Fade, Card ,Button
+  Box, Typography, Grid, Pagination, Card, Paper, Tabs, Tab,
+  useTheme, useMediaQuery, Fade
 } from '@mui/material';
-import fetchNews from '@/_mocks/mockData'; // Adjust the path as needed
-import { Link as RouterLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import fetchNews from '@/_mocks/mockData'; // Adjust the path if needed
 
 function NewsTabs() {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -12,6 +12,7 @@ function NewsTabs() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const itemsPerPage = 10;
@@ -27,28 +28,33 @@ function NewsTabs() {
   const currentCountry = countries[selectedTab].value;
 
   useEffect(() => {
-  const loadNews = async () => {
-    setLoading(true);
-    const newsData = await fetchNews(currentCountry);
-    console.log('Fetched newsData:', newsData.cn); // 👈 log it
-    setArticles(newsData.cn);
-    setPage(1);
-    setLoading(false);
-  };
-
-  loadNews();
-}, [currentCountry]);
+    const loadNews = async () => {
+      setLoading(true);
+      const newsData = await fetchNews(currentCountry);
+      console.log('Fetched newsData:', newsData?.[currentCountry]); // ✅ safer access
+      setArticles(newsData?.[currentCountry] || []);
+      setPage(1);
+      setLoading(false);
+    };
+    loadNews();
+  }, [currentCountry]);
 
   const totalPages = Math.ceil(articles.length / itemsPerPage);
   const startIndex = (page - 1) * itemsPerPage;
   const currentArticles = articles.slice(startIndex, startIndex + itemsPerPage);
- console.log("currentArticles",currentArticles)
+
   const handleTabChange = (_, newIndex) => {
     setSelectedTab(newIndex);
   };
 
   const handlePageChange = (_, newPage) => {
     setPage(newPage);
+  };
+
+  const onArticleClick = ({ userId, reqId, docId }) => {
+    navigate('/NewsHomePage', {
+      state: { userId, reqId, docId },
+    });
   };
 
   let content;
@@ -62,7 +68,7 @@ function NewsTabs() {
   } else if (currentArticles.length > 0) {
     content = (
       <Grid container spacing={2}>
-        {currentArticles.map((article) => (         
+        {currentArticles.map((article) => (
           <Grid
             item
             xs={12}
@@ -92,20 +98,25 @@ function NewsTabs() {
             )}
             <Box sx={{ flexGrow: 1 }}>
               <Typography
-                variant="h6"
+                onClick={() =>
+                  onArticleClick({
+                    userId: article.userId || '1',
+                    reqId: article.reqId || '1',
+                    docId: article.docId || '1',
+                  })
+                }
                 sx={{
-                  fontSize: '20px',
+                  cursor: 'pointer',
                   fontWeight: '600',
+                  fontSize: '20px',
                   color: '#0F4C97',
+                  '&:hover': {
+                    textDecoration: 'underline',
+                    color: '#1a73e8',
+                  },
                 }}
               >
-                <RouterLink
-                  to="/ArticleDetailPage"
-                  state={{  userId:'1', reqId:'1', docId:'1' }}
-                  style={{ textDecoration: 'none', color: 'inherit' }}
-                   >
-                  {article.title}
-                </RouterLink>
+                {article.title}
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 {article.description}

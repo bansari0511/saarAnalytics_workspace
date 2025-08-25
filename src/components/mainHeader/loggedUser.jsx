@@ -19,7 +19,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import avatar from '@/assets/images/logo/png/user1.png';
 // assets
-import SearchIcon from '@/assets/images/icons/seach4.png';
+import SearchIcon from '@/assets/images/icons/search4.png';
 // Components
 
 function LoggedUser() {
@@ -70,12 +70,12 @@ function LoggedUser() {
 				>
 					<SearchIcon />
 				</IconButton> */}
-<IconButton onClick={() => setShowSearch(!showSearch)}>
+<IconButton onClick={() => setShowSearch(!showSearch)} >
   <Box
     component="img"
     src={SearchIcon}
     alt="Search"
-    sx={{ width: 35, height: 35,borderRadius: '5px', padding: '5px',backgroundColor:'azure' }}
+    sx={{ width: 30, height: 30}}
   />
 </IconButton>
 

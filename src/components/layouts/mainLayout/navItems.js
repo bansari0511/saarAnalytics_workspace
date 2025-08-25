@@ -5,7 +5,6 @@ import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import NewspaperOutlined from '@mui/icons-material/NewspaperOutlined';
 import MapOutlined from '@mui/icons-material/MapOutlined';
-import AutoStoriesOutlinedIcon from '@mui/icons-material/AutoStoriesOutlined';
 
 /**
  * @example

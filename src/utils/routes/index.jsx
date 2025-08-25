@@ -5,7 +5,6 @@ import withLazyLoadably from '@hocs/withLazyLoadably';
 import MainLayout from '@/components/layouts/mainLayout';
 import MinimalLayout from '@/components/layouts/minimalLayout';
 import Page404 from '@/pages/errorPages/404';
-import ArticleDetailPage from '@/newsRoom/ArticleDetailPage';
 
 const Dashboard3Page = withLazyLoadably(lazy(() => import('@/pages/dashboardsPages/dashboard3')));
 const NewsHomePage = withLazyLoadably(lazy(() => import('@/newsRoom/NewsHomePage')));
@@ -30,7 +29,6 @@ function Router() {
 						<Route path="dashboard3" element={<Dashboard3Page />} />
 						<Route path="samplePage" element={<SamplePage />} />
 						<Route path="NewsHomePage" element={<NewsHomePage />} />  
-						<Route path="ArticleDetailPage" element={<ArticleDetailPage />} />
 					{/* <Route path="/" element={<MainLayout />}>
 						<Route index element={<Dashboard3Page />} />
 						<Route path="dashboard3" element={<Dashboard3Page />} />						

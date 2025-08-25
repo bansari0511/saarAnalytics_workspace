@@ -1,27 +1,24 @@
 import { useState, useEffect } from 'react';
 import {
-  Box, Typography, Grid, Paper, CircularProgress,
-  Breadcrumbs, Button
+  Box, Typography, Paper, CircularProgress, IconButton,
 } from '@mui/material';
-import { useLocation } from 'react-router-dom';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+
 import mockNewsDetails from '@/_mocks/mockNewsDetails';
-import PageHeader from '@/components/pageHeader';
 import '@/assets/css/ArticleDetailPage.css';
 
-  const highlightTermsInHTMLString = (htmlString, highlights) => {
-    if (!htmlString || !highlights?.length) return htmlString;
-    const escapeRegex = (term) => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const regex = new RegExp(`\\b(${highlights.map(escapeRegex).join('|')})\\b`, 'gi');
-    return htmlString.replace(regex, (match) => `<span style="color: #1176f0;font-size: 17px;">${match}</span>`);
-  };
+const highlightTermsInHTMLString = (htmlString, highlights) => {
+  if (!htmlString || !highlights?.length) return htmlString;
+  const escapeRegex = (term) => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex = new RegExp(`\\b(${highlights.map(escapeRegex).join('|')})\\b`, 'gi');
+  return htmlString.replace(regex, (match) => `<span style="color: #1176f0;font-size: 17px;">${match}</span>`);
+};
 
-
-function ArticleDetailPage() {
+function ArticleDetailPage({ userId, reqId, docId, onBack }) {
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
-  const location = useLocation();
-
-  const { userId, reqId, docId } = location.state || {};
+  const [showRelatedInfo, setShowRelatedInfo] = useState(true);
 
   useEffect(() => {
     const loadArticle = async () => {
@@ -42,7 +39,7 @@ function ArticleDetailPage() {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
         <CircularProgress />
       </Box>
     );
@@ -58,102 +55,171 @@ function ArticleDetailPage() {
     );
   }
 
-   const highlightTerms = article.highlights || [];
-
-const highlightedContent = highlightTermsInHTMLString(article.content, highlightTerms);
+  const highlightTerms = article.highlights || [];
+  const highlightedContent = highlightTermsInHTMLString(article.content, highlightTerms);
 
   return (
-    <>
-       <PageHeader title="News Details">
-      <Breadcrumbs aria-label="breadcrumb" sx={{ textTransform: 'uppercase' }}>
-        <Button variant="outlined" size="small" href="/NewsHomePage">
-          BACK TO NEWSROOM
-        </Button>
-      </Breadcrumbs>
-    </PageHeader>
-
-    <Grid container spacing={2}>
-      {/* Article Content Section */}
-      <Grid item xs={12} sm={10} md={10}>
+    <Box
+      component="main"
+      sx={{
+        display: 'flex',
+        width: '100%',
+        // height: 'auto', // no fixed height so page scrolls normally
+        alignItems: 'stretch',  // stretch children height
+        boxSizing: 'border-box',
+        padding: 1,
+        gap: 2,
+      }}
+    >
+      {/* Main Content */}
+      <Box
+        sx={{
+          flexGrow: 1,
+          boxSizing: 'border-box',
+          minWidth: 0, // for flexbox overflow fix
+        }}
+      >
         <Paper elevation={3} sx={{ padding: 3 }}>
           <Box
             sx={{ lineHeight: 1.8, fontSize: '16px' }}
             dangerouslySetInnerHTML={{ __html: highlightedContent }}
           />
         </Paper>
-      </Grid>
+      </Box>
 
-
-        {/* Entities Section */}
-       <Grid item xs={12} sm={2} md={2}>
-  <Box
-    sx={{
-      backgroundColor: '#ffffff',
-      padding: 2,
-      borderRadius: 2,
-      boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-      height: '100%',
-      overflowY: 'auto',
-      
-    }}
-  >
-    <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
-      <h2>Related Info</h2>
-    </Typography>
-
-    {article.entities.map((entity, index) => {
-      const [key, values] = Object.entries(entity)[0];
-      return (
-        <Paper
-          key={index}
-          elevation={1}
+      {/* Related Info Sidebar */}
+      <Box
+        sx={{
+          width: showRelatedInfo ? 300 : 40,
+          transition: 'width 0.3s ease',
+          backgroundColor: '#1a4980',
+          color: 'white',
+          boxShadow: '-2px 0 5px rgba(0,0,0,0.1)',
+          boxSizing: 'border-box',
+          paddingTop: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'stretch',
+          // Make height match content height by stretching with flex container
+          // No scroll inside sidebar
+        }}
+      >
+        {/* Header with Toggle */}
+        <Box
           sx={{
-            padding: 1.5,
-            mb: 2,
-            backgroundColor: '#aac8ed',
-            backgroundImage: 'linear-gradient(90deg, #1a4980, #64a0de)',
-            borderRadius: 5,            
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: showRelatedInfo ? 'space-between' : 'center',
+            padding: '8px 12px',
+            borderBottom: '1px solid rgba(255,255,255,0.2)',
+            flexShrink: 0,
           }}
         >
-          {/* Key (title) */}
-          <Typography
-            variant="subtitle2"
+          {showRelatedInfo && (
+            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: 'white' }}>
+              Related Info
+            </Typography>
+          )}
+          <IconButton
+            size="small"
+            onClick={() => setShowRelatedInfo(prev => !prev)}
             sx={{
-              fontSize:'18px',
-              fontWeight: 600,
-              color: '#cacaca', // corrected color
-              textTransform: 'capitalize',
-              mb: 1,
+              color: 'white',
+              backgroundColor: 'rgba(255,255,255,0.1)',
+              '&:hover': {
+                backgroundColor: 'rgba(255,255,255,0.2)',
+              },
+              ml: 1,
             }}
           >
-            {key}
-          </Typography>
+            {showRelatedInfo ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+          </IconButton>
+        </Box>
 
-          {/* Values (list of related items) */}
+        {/* Content */}
+        {showRelatedInfo ? (
           <Box
             sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 0.5,
-              maxHeight: '150px',
-              overflowY: 'auto',
-              color:'#004d99',
-              fontWeight:600,
+              padding: 2,
+              overflow: 'visible', // no scroll inside sidebar
+              flexGrow: 1,
             }}
           >
-            {values.map((item, idx) => (
-              <Typography key={idx} variant="body2" sx={{ color: 'white',borderBottom: '1px solid',padding: '5px' }}>
-                {item}
-              </Typography>
-            ))}
+            {article.entities.map((entity, index) => {
+              const [key, values] = Object.entries(entity)[0];
+              return (
+                <Paper
+                  key={index}
+                  elevation={1}
+                  sx={{
+                    padding: 1.5,
+                    mb: 2,
+                    backgroundColor: '#64a0de',
+                    borderRadius: 2,
+                  }}
+                >
+                  <Typography
+                    variant="subtitle2"
+                    sx={{
+                      fontSize: '18px',
+                      fontWeight: 600,
+                      color: 'white',
+                      textTransform: 'capitalize',
+                      mb: 1,
+                    }}
+                  >
+                    {key}
+                  </Typography>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 0.5,
+                      color: 'white',
+                      fontWeight: 600,
+                    }}
+                  >
+                    {values.map((item, idx) => (
+                      <Typography
+                        key={idx}
+                        variant="body2"
+                        sx={{
+                          borderBottom: '1px solid rgba(255,255,255,0.3)',
+                          padding: '5px',
+                          color:'white',
+                        }}
+                      >
+                        {item}
+                      </Typography>
+                    ))}
+                  </Box>
+                </Paper>
+              );
+            })}
           </Box>
-        </Paper>
-      );
-    })}
-  </Box>
-</Grid>
-      </Grid>
-    </>
+        ) : (
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              writingMode: 'vertical-rl',
+              transform: 'rotate(180deg)',
+              fontWeight: 'bold',
+              letterSpacing: 1,
+              color: 'rgba(255,255,255,0.7)',
+              userSelect: 'none',
+              minHeight: '100px',
+              padding: 1,
+            }}
+            title="Expand Related Info"
+          >
+            Related Info
+          </Box>
+        )}
+      </Box>
+    </Box>
   );
 }
 
