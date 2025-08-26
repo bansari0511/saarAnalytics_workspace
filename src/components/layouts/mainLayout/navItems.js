@@ -92,7 +92,7 @@ const NAV_LINKS_CONFIG = [
 		type: 'item',
 		title: 'Map',
 		Icon: MapOutlined,
-		href: '/profile',
+		href: '/MapView',
 	},
 	{
 		id: uuid(),

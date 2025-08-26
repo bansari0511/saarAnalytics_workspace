@@ -11,6 +11,8 @@ const NewsHomePage = withLazyLoadably(lazy(() => import('@/newsRoom/NewsHomePage
 const WIPPage = withLazyLoadably(lazy(() => import('@/pages/wip')));
 const SamplePage = withLazyLoadably(lazy(() => import('@/pages/sample')));
 const HomePage = withLazyLoadably(lazy(() => import('@/pages/HomePage')));
+const MapView = withLazyLoadably(lazy(() => import('@/pages/mapPage/MapView')));
+
 
 function Router() {
 	return (
@@ -29,6 +31,7 @@ function Router() {
 						<Route path="dashboard3" element={<Dashboard3Page />} />
 						<Route path="samplePage" element={<SamplePage />} />
 						<Route path="NewsHomePage" element={<NewsHomePage />} />  
+						<Route path="MapView" element={<MapView />} />
 					{/* <Route path="/" element={<MainLayout />}>
 						<Route index element={<Dashboard3Page />} />
 						<Route path="dashboard3" element={<Dashboard3Page />} />						

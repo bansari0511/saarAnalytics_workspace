@@ -17,6 +17,7 @@
 		"installD": "npm install --no-audit --no-fund --no-optional"
 	},
 	"dependencies": {
+		"@arcgis/core": "^4.33.12",
 		"@emotion/react": "^11.10.6",
 		"@emotion/styled": "^11.10.6",
 		"@fontsource/roboto": "^4.5.8",
