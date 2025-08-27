@@ -10,10 +10,7 @@ import product4 from '@/assets/images/products/product_4.jpg';
  * @returns {Promise<Array>} - Array of news articles
  */
 
-
-
 async function fetchNews() {
- const  countryCode = 'cn';
   try { 
    const response = {
     cn: [

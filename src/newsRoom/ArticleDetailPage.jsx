@@ -8,14 +8,20 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import mockNewsDetails from '@/_mocks/mockNewsDetails';
 import '@/assets/css/ArticleDetailPage.css';
 
-const highlightTermsInHTMLString = (htmlString, highlights) => {
-  if (!htmlString || !highlights?.length) return htmlString;
-  const escapeRegex = (term) => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const regex = new RegExp(`\\b(${highlights.map(escapeRegex).join('|')})\\b`, 'gi');
-  return htmlString.replace(regex, (match) => `<span style="color: #1176f0;font-size: 17px;">${match}</span>`);
-};
+// Function to extract <data> tag image URLs and replace them with <img> tags
+const renderImagesInContent = (htmlString) =>
+  htmlString.replace(
+    /<data\s+value="([^"]+)"[^>]*data-caption="([^"]+)"[^>]*>/g,
+    (match, imgUrl, caption) => `
+      <img
+        src="${imgUrl}"
+        alt="${caption}"
+        style="width: 30%; max-height: 30; object-fit: cover;text-align:center;"
+      />
+    `
+  );
 
-function ArticleDetailPage({ userId, reqId, docId, onBack }) {
+function ArticleDetailPage({ userId, reqId, docId }) {
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showRelatedInfo, setShowRelatedInfo] = useState(true);
@@ -55,8 +61,11 @@ function ArticleDetailPage({ userId, reqId, docId, onBack }) {
     );
   }
 
-  const highlightTerms = article.highlights || [];
-  const highlightedContent = highlightTermsInHTMLString(article.content, highlightTerms);
+  // const highlightTerms = article.highlights || [];
+  let highlightedContent = article.content;
+
+  // Process images dynamically by replacing <data> with <img>
+  highlightedContent = renderImagesInContent(highlightedContent);
 
   return (
     <Box
@@ -64,8 +73,7 @@ function ArticleDetailPage({ userId, reqId, docId, onBack }) {
       sx={{
         display: 'flex',
         width: '100%',
-        // height: 'auto', // no fixed height so page scrolls normally
-        alignItems: 'stretch',  // stretch children height
+        alignItems: 'stretch',
         boxSizing: 'border-box',
         padding: 1,
         gap: 2,
@@ -100,8 +108,6 @@ function ArticleDetailPage({ userId, reqId, docId, onBack }) {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'stretch',
-          // Make height match content height by stretching with flex container
-          // No scroll inside sidebar
         }}
       >
         {/* Header with Toggle */}
@@ -141,7 +147,7 @@ function ArticleDetailPage({ userId, reqId, docId, onBack }) {
           <Box
             sx={{
               padding: 2,
-              overflow: 'visible', // no scroll inside sidebar
+              overflow: 'visible',
               flexGrow: 1,
             }}
           >

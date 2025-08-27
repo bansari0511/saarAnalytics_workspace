@@ -5,6 +5,7 @@ async function mockNewsDetails(userId, reqId, docId) {
     id: docId,
     title: `Article for user ${userId}, request ${reqId}, document ${docId}`,
     content: `
+      <data value="http://192.168.5.65/img1.jpg" data-type="Asset" data-caption="A Z-20 in China Coast Guard livery seen here flying from <i>haijing</i>" data-credit="Malaysian Maritime Enforcement Agency"></data>
       <h1>Welcome to Our Platform</h1>
       <p>
         Our mission is to empower individuals and organizations by providing intuitive tools and seamless experiences
@@ -33,6 +34,7 @@ async function mockNewsDetails(userId, reqId, docId) {
       <p>
         Stay updated by subscribing to our newsletter, and don't forget to follow us on social media for tips,
         updates, and product announcements.
+         <data value="http://192.168.5.65/img2.png" data-type="Asset" data-caption="A Z-20 in China Coast Guard livery seen here flying from <i>haijing</i>" data-credit="Malaysian Maritime Enforcement Agency"></data>
       </p>
 
       <p>This is a long paragraph of text that gives a summary of the news article...</p>
@@ -43,19 +45,6 @@ async function mockNewsDetails(userId, reqId, docId) {
           <p>This is a test paragraph mentioning Apple and banana.</p>
         </li>
       </ul>
-      <h2>Why Choose Us?</h2>
-      <ul>
-        <li><strong>User-Friendly:</strong> Simple interfaces designed for everyone.</li>
-        <li><strong>Reliable:</strong> Backed by modern infrastructure with 99.9% uptime.</li>
-        <li><strong>Scalable:</strong> Grows with your business — from startup to enterprise.</li>
-        <li><strong>Supportive:</strong> 24/7 customer support and an active community forum.</li>
-      </ul>
-
-      <h2>Getting Started</h2>
-      <p>
-        To begin, sign up for a free account and explore our quick-start guides in the documentation center.
-        We also offer onboarding support for teams and enterprises.
-      </p>
 
       <h2>Why Choose Us?</h2>
       <ul>
@@ -80,13 +69,14 @@ async function mockNewsDetails(userId, reqId, docId) {
       </ul>
 
       <h2>Getting Started</h2>
+      <data value="http://192.168.5.65/img3.jpeg" data-type="Asset" data-caption="A Z-20 in China Coast Guard livery seen here flying from <i>haijing</i>" data-credit="Malaysian Maritime Enforcement Agency"></data>
       <p>
         To begin, sign up for a free account and explore our quick-start guides in the documentation center.
         We also offer onboarding support for teams and enterprises.
       </p>
 
     `,
-    highlights: ['User-Friendly', 'Reliable', 'Scalable','Supportive'],
+    highlights: ['User-Friendly', 'Reliable', 'Scalable', 'Supportive'],
     entities: [
       {
         militaryGroup: [
@@ -121,24 +111,3 @@ async function mockNewsDetails(userId, reqId, docId) {
 }
 
 export default mockNewsDetails;
-
-
-// const articles = {
-//   '123': {
-//     title: 'Sample Article',
-//     content: '<p>Lorem ipsum dolor sit amet...</p><ul><li>Point 1</li></ul>',
-//   },
-//   '456': {
-//     title: 'Another Article',
-//     content: '<p>More content here...</p>',
-//   },
-// };
-
-// export default async function mockNewsDetails(id) {
-//   // Simulate async fetch
-//   return new Promise((resolve) => {
-//     setTimeout(() => {
-//       resolve(articles[id] || null);
-//     }, 500);
-//   });
-// }
