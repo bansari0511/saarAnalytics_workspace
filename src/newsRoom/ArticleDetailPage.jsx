@@ -98,7 +98,7 @@ function ArticleDetailPage({ userId, reqId, docId }) {
       {/* Related Info Sidebar */}
       <Box
         sx={{
-          width: showRelatedInfo ? 300 : 40,
+          width: showRelatedInfo ? 450 : 40,
           transition: 'width 0.3s ease',
           backgroundColor: '#1a4980',
           color: 'white',
@@ -225,6 +225,8 @@ function ArticleDetailPage({ userId, reqId, docId }) {
           </Box>
         )}
       </Box>
+
+      
     </Box>
   );
 }

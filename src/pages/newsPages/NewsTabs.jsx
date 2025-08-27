@@ -69,7 +69,7 @@ function NewsTabs() {
 				</Typography>
 			</Box>
 			<Box sx={{ width: '100%' }}>
-				{/* <Paper
+				<Paper
 					elevation={2}
 					sx={{
 						mb: 2,
@@ -78,8 +78,8 @@ function NewsTabs() {
 						padding: '4px',
 						marginBottom: '7px',
 					}}
-				> */}
-				{/* <Tabs
+				>
+				<Tabs
 						value={selectedTab}
 						onChange={handleTabChange}
 						variant={isMobile ? 'scrollable' : 'fullWidth'}
@@ -118,8 +118,8 @@ function NewsTabs() {
 						{countries.map((country) => (
 							<Tab key={country.value} label={country.label} sx={{ fontSize: '10px' }} />
 						))}
-					</Tabs> */}
-				{/* </Paper> */}
+					</Tabs>
+				</Paper>
 
 				<Fade in>
 					<Card
