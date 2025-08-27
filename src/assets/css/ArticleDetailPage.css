@@ -14,3 +14,9 @@
   color: #333;
   font-family: 'Roboto', sans-serif;
 }
+
+.highlight {
+  background-color: yellow;  /* or any color you prefer */
+  font-weight: bold;
+  padding: 0 4px;
+}

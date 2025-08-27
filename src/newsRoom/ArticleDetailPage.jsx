@@ -9,17 +9,30 @@ import mockNewsDetails from '@/_mocks/mockNewsDetails';
 import '@/assets/css/ArticleDetailPage.css';
 
 // Function to extract <data> tag image URLs and replace them with <img> tags
-const renderImagesInContent = (htmlString) =>
+const renderImagesInContent = (htmlString) => 
   htmlString.replace(
     /<data\s+value="([^"]+)"[^>]*data-caption="([^"]+)"[^>]*>/g,
     (match, imgUrl, caption) => `
       <img
         src="${imgUrl}"
         alt="${caption}"
-        style="width: 30%; max-height: 30; object-fit: cover;text-align:center;"
+        style="width: 40%; max-height: 40%; object-fit: cover;"
       />
     `
   );
+
+// Function to highlight content based on the provided highlights
+const renderHighlightedContent = (htmlString, highlights) => {
+  let content = renderImagesInContent(htmlString);
+
+  // Highlight terms by wrapping them in a <span> with the "highlight" class
+  highlights.forEach((term) => {
+    const regex = new RegExp(`(${term})`, 'gi');
+    content = content.replace(regex, (match) => `<span class="highlight">${match}</span>`);
+  });
+
+  return content;
+};
 
 function ArticleDetailPage({ userId, reqId, docId }) {
   const [article, setArticle] = useState(null);
@@ -61,11 +74,8 @@ function ArticleDetailPage({ userId, reqId, docId }) {
     );
   }
 
-  // const highlightTerms = article.highlights || [];
-  let highlightedContent = article.content;
-
-  // Process images dynamically by replacing <data> with <img>
-  highlightedContent = renderImagesInContent(highlightedContent);
+  // Combine both image processing and highlighting
+  const highlightedContent = renderHighlightedContent(article.content, article.highlights);
 
   return (
     <Box
@@ -225,8 +235,6 @@ function ArticleDetailPage({ userId, reqId, docId }) {
           </Box>
         )}
       </Box>
-
-      
     </Box>
   );
 }
