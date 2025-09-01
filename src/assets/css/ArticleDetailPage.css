@@ -1,8 +1,3 @@
-.highlight {
-  background-color: yellow;
-  font-weight: bold;
-  padding: 0 2px;
-}
 
 .article-content p,
 .article-content ul,
@@ -16,7 +11,8 @@
 }
 
 .highlight {
-  background-color: yellow;  /* or any color you prefer */
+  background-color: none; 
   font-weight: bold;
   padding: 0 4px;
+  color: #0869db;
 }

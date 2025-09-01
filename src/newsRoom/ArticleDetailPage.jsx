@@ -4,20 +4,24 @@ import {
 } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-
 import mockNewsDetails from '@/_mocks/mockNewsDetails';
 import '@/assets/css/ArticleDetailPage.css';
 
 // Function to extract <data> tag image URLs and replace them with <img> tags
-const renderImagesInContent = (htmlString) => 
+const renderImagesInContent = (htmlString) =>
   htmlString.replace(
     /<data\s+value="([^"]+)"[^>]*data-caption="([^"]+)"[^>]*>/g,
     (match, imgUrl, caption) => `
-      <img
-        src="${imgUrl}"
-        alt="${caption}"
-        style="width: 40%; max-height: 40%; object-fit: cover;"
-      />
+      <figure style="display: flex; flex-direction: column; align-items: center; margin: 16px 0;">
+        <img
+          src="${imgUrl}"
+          alt="${caption}"
+          style="width: auto; height: 300px; object-fit: cover; border-radius: 8px;"
+        />
+        <figcaption style="font-size: 14px; color: #666; margin-top: 8px; text-align: center;">
+          ${caption}
+        </figcaption>
+      </figure>
     `
   );
 
@@ -202,7 +206,7 @@ function ArticleDetailPage({ userId, reqId, docId }) {
                         sx={{
                           borderBottom: '1px solid rgba(255,255,255,0.3)',
                           padding: '5px',
-                          color:'white',
+                          color: 'white',
                         }}
                       >
                         {item}

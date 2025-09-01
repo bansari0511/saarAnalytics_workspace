@@ -15,36 +15,36 @@ function NewsRoomPage() {
   const handleBack = () => {
     navigate('/NewsHomePage'); // Clears state
   };
-//   const handleArticleClick = ({ userId, reqId, docId }) => {
-//     setSearchParams({ userId, reqId, docId });
-//   };
+  //   const handleArticleClick = ({ userId, reqId, docId }) => {
+  //     setSearchParams({ userId, reqId, docId });
+  //   };
 
-//   const handleBack = () => {
-//     setSearchParams({});
-//   };
-	return (
-		<>
-	  <PageHeader title="News Inventory">
-       <Breadcrumbs>
-  {isViewingArticle && (
-    <Button onClick={handleBack}>← BACK TO NEWSROOM</Button>
-  )}
-  <Button href="/dashboard3">BACK TO HOME</Button>
-</Breadcrumbs>
+  //   const handleBack = () => {
+  //     setSearchParams({});
+  //   };
+  return (
+    <>
+      <PageHeader title="News Inventory">
+        <Breadcrumbs>
+          {isViewingArticle && (
+            <Button onClick={handleBack}>← BACK TO NEWSROOM</Button>
+          )}
+          <Button href="/dashboard3">BACK TO HOME</Button>
+        </Breadcrumbs>
       </PageHeader>
 
       <Grid container spacing={1}>
         <Grid item xs={12}>
           {isViewingArticle ? (
             <ArticleDetailPage userId={userId} reqId={reqId} docId={docId} onBack={handleBack} />
-			
+
           ) : (
             <NewsTabs />
           )}
         </Grid>
       </Grid>
-		</>
-	);
+    </>
+  );
 }
 
 export default NewsRoomPage;
