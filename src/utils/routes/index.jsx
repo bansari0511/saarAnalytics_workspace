@@ -12,6 +12,7 @@ const WIPPage = withLazyLoadably(lazy(() => import('@/pages/wip')));
 const SamplePage = withLazyLoadably(lazy(() => import('@/pages/sample')));
 const HomePage = withLazyLoadably(lazy(() => import('@/pages/HomePage')));
 const MapView = withLazyLoadably(lazy(() => import('@/pages/mapPage/MapView')));
+const ImoProfileCard = withLazyLoadably(lazy(() => import('@/pages/imoProfile/ImoProfileCard')));
 
 
 function Router() {
@@ -24,15 +25,16 @@ function Router() {
 							<Route path="HomePage" element={<HomePage />} />
 						</Route>
 					</Route>
-                    <Route index element={<HomePage />} /> {/* Default route to HomePage */}
-                     <Route path="/" element={<MainLayout />}>
-					    {/* <Route index  element={<Dashboard3Page />} /> */}                    						
+					<Route index element={<HomePage />} /> {/* Default route to HomePage */}
+					<Route path="/" element={<MainLayout />}>
+						{/* <Route index  element={<Dashboard3Page />} /> */}
 						{/* Other routes */}
 						<Route path="dashboard3" element={<Dashboard3Page />} />
 						<Route path="samplePage" element={<SamplePage />} />
-						<Route path="NewsHomePage" element={<NewsHomePage />} />  
+						<Route path="NewsHomePage" element={<NewsHomePage />} />
 						<Route path="MapView" element={<MapView />} />
-					{/* <Route path="/" element={<MainLayout />}>
+						<Route path="ImoProfileCard" element={<ImoProfileCard />} />
+						{/* <Route path="/" element={<MainLayout />}>
 						<Route index element={<Dashboard3Page />} />
 						<Route path="dashboard3" element={<Dashboard3Page />} />						
 						<Route path="samplePage" element={<SamplePage />} />

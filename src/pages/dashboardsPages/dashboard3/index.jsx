@@ -3,7 +3,6 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 // import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import PageHeader from '@/components/pageHeader';
-import SalesOverviewCard from './salesCard';
 import StatsSection from './statsSection';
 import EarningsSection from './earningsSection';
 import ProductsSection from './productsSection';

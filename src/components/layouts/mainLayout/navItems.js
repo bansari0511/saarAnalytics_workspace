@@ -33,7 +33,7 @@ const NAV_LINKS_CONFIG = [
 		Icon: NewspaperOutlined,
 		href: '/NewsHomePage',
 	},
-	
+
 	// {
 	// 	id: uuid(),
 	// 	type: 'group',
@@ -99,7 +99,7 @@ const NAV_LINKS_CONFIG = [
 		type: 'item',
 		title: 'Profile',
 		Icon: AccountCircleOutlinedIcon,
-		href: '/profile',
+		href: '/ImoProfileCard',
 	},
 ];
 

@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import {
   Box, Typography, Grid, Pagination, Card, Paper, Tabs, Tab,
-  useTheme, useMediaQuery, Fade, List, ListItemButton, ListItemText, TextField
+  useTheme, useMediaQuery, Fade, List, ListItemButton, ListItemText, TextField,
+  Accordion, AccordionSummary, AccordionDetails,
 } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useNavigate } from 'react-router-dom';
 import fetchNews from '@/_mocks/mockData'; // Adjust path if needed
 
@@ -17,43 +19,57 @@ function NewsTabs() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const countries = [
-    { label: '🇨🇳 China', value: 'cn' },
-    { label: '🇺🇸 USA', value: 'us' },
-    { label: '🇮🇳 India', value: 'in' },
-    { label: '🇧🇩 Bangladesh', value: 'bd' },
-    { label: '🇱🇰 Sri Lanka', value: 'lk' },
-    { label: '🇦🇫 Afghanistan', value: 'af' },
-    { label: '🇯🇵 Japan', value: 'jp' },
-    { label: '🇬🇧 UK', value: 'gb' },
-    { label: '🇨🇦 Canada', value: 'ca' },
-    { label: '🇩🇪 Germany', value: 'de' },
-    { label: '🇫🇷 France', value: 'fr' },
-    { label: '🇦🇺 Australia', value: 'au' },
-    { label: '🇧🇷 Brazil', value: 'br' },
-    { label: '🇿🇦 South Africa', value: 'za' },
-    { label: '🇷🇺 Russia', value: 'ru' },
-    { label: '🇰🇷 South Korea', value: 'kr' },
+  const regionsData = [
+    {
+      region: 'Asia',
+      countries: [
+        { label: '🇨🇳 China', value: 'cn' },
+        { label: '🇮🇳 India', value: 'in' },
+        { label: '🇧🇩 Bangladesh', value: 'bd' },
+        { label: '🇱🇰 Sri Lanka', value: 'lk' },
+        { label: '🇦🇫 Afghanistan', value: 'af' },
+        { label: '🇯🇵 Japan', value: 'jp' },
+        { label: '🇰🇷 South Korea', value: 'kr' },
+      ],
+    },
+    {
+      region: 'North America',
+      countries: [
+        { label: '🇺🇸 USA', value: 'us' },
+        { label: '🇨🇦 Canada', value: 'ca' },
+      ],
+    },
+    {
+      region: 'Europe',
+      countries: [
+        { label: '🇬🇧 UK', value: 'gb' },
+        { label: '🇩🇪 Germany', value: 'de' },
+        { label: '🇫🇷 France', value: 'fr' },
+        { label: '🇷🇺 Russia', value: 'ru' },
+      ],
+    },
+    {
+      region: 'South America',
+      countries: [{ label: '🇧🇷 Brazil', value: 'br' }],
+    },
+    {
+      region: 'Africa',
+      countries: [{ label: '🇿🇦 South Africa', value: 'za' }],
+    },
+    {
+      region: 'Oceania',
+      countries: [{ label: '🇦🇺 Australia', value: 'au' }],
+    },
   ];
-  const [tabCountries, setTabCountries] = useState(countries.slice(0, 6));
-  // Fix: use tabCountries to get current country
-  const currentCountry = tabCountries[selectedTab]?.value || countries[0].value;
 
-  // useEffect(() => {
-  //   const loadNews = async () => {
-  //     setLoading(true);
-  //     const newsData = await fetchNews(currentCountry);
-  //     setArticles(newsData.result || []);  // REPLACE the articles!
-  //     setPage(1);                          // reset page to 1 on country change
-  //     setLoading(false);
-  //   };
-  //   loadNews();
-  // }, [currentCountry]);  // <-- only fetch when country changes, NOT on page change
+  const allCountries = regionsData.flatMap(region => region.countries);
+  const [tabCountries, setTabCountries] = useState(allCountries.slice(0, 6));
+  const currentCountry = tabCountries[selectedTab]?.value || allCountries[0].value;
 
   const effectRan = useRef(false);
 
   useEffect(() => {
-    if (effectRan.current) return; // Skip subsequent calls in Strict Mode
+    if (effectRan.current) return;
     effectRan.current = true;
 
     const loadNews = async () => {
@@ -65,7 +81,6 @@ function NewsTabs() {
     };
     loadNews();
 
-    // Cleanup if needed
     return () => {
       effectRan.current = false;
     };
@@ -91,14 +106,23 @@ function NewsTabs() {
   };
 
   const handleCountrySelect = (country) => {
-    const exists = tabCountries.find(c => c.value === country.value);
-    if (exists) {
-      const index = tabCountries.findIndex(c => c.value === country.value);
-      setSelectedTab(index);
+    const existsIndex = tabCountries.findIndex(c => c.value === country.value);
+
+    if (existsIndex !== -1) {
+      const updatedTabs = tabCountries.filter((_, i) => i !== existsIndex);
+      setTabCountries(updatedTabs);
+      if (selectedTab === existsIndex) {
+        setSelectedTab(0);
+      } else if (selectedTab > existsIndex) {
+        setSelectedTab(prev => prev - 1);
+      }
     } else {
       const updatedTabs = [...tabCountries];
       if (updatedTabs.length >= 6) {
         updatedTabs.shift();
+        if (selectedTab > 0) {
+          setSelectedTab(prev => prev - 1);
+        }
       }
       updatedTabs.push(country);
       setTabCountries(updatedTabs);
@@ -106,14 +130,7 @@ function NewsTabs() {
     }
   };
 
-  // Filter countries by search input
-  const filteredCountries = countries.filter(c =>
-    c.label.toLowerCase().includes(search.toLowerCase()) ||
-    c.value.toLowerCase().includes(search.toLowerCase())
-  );
-
   let content;
-
   if (loading) {
     content = (
       <Typography variant="body1" sx={{ py: 4, textAlign: 'center', fontWeight: 500 }}>
@@ -165,10 +182,7 @@ function NewsTabs() {
                 />
               )}
               <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <Typography
-                  variant="h6"
-                  sx={{ color: '#0F4C97', fontWeight: '700', mb: 1 }}
-                >
+                <Typography variant="h6" sx={{ color: '#0F4C97', fontWeight: '700', mb: 1 }}>
                   {article.title}
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ flexGrow: 1 }}>
@@ -224,121 +238,186 @@ function NewsTabs() {
   }
 
   return (
-    <Card sx={{ height: 'inherit', padding: 0, boxShadow: 4 }}>
-      <Box sx={{ display: 'flex', flexDirection: 'row', height: '100vh' }}>
-        {/* Left Sidebar */}
-        <Box
-          sx={{
-            width: 260,
-            p: 2,
-            borderRight: 1,
-            borderColor: 'divider',
-            bgcolor: 'background.paper',
-            position: 'sticky',
-            top: 0,
-            height: '100vh',
-            overflowY: 'auto',
-            boxShadow: 2,
-          }}
-        >
-          <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>
-            All Countries
-          </Typography>
-          <TextField
-            size="small"
-            fullWidth
-            placeholder="Search countries"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            sx={{ mb: 2 }}
-          />
-          <List dense>
-            {filteredCountries.map((country) => {
-              const selected = tabCountries.some(c => c.value === country.value);
-              return (
-                <ListItemButton
-                  key={country.value}
-                  selected={selected}
-                  onClick={() => handleCountrySelect(country)}
-                  sx={{
-                    borderRadius: 1,
-                    mb: 0.5,
-                    fontWeight: selected ? '700' : '400',
-                    '&.Mui-selected': {
-                      bgcolor: 'primary.light',
-                      color: 'primary.main',
-                      '&:hover': {
-                        bgcolor: 'primary.light',
-                      },
-                    },
-                  }}
-                >
-                  <ListItemText primary={country.label} />
-                </ListItemButton>
-              );
-            })}
-          </List>
-        </Box>
+    // <Card sx={{ height: 'inherit', padding: 0, boxShadow: 4 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'row', height: '100vh', gap: 2 }}>
 
-        {/* Right Content */}
-        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', p: 2 }}>
-          <Paper
-            elevation={3}
-            sx={{
-              mb: 3,
-              background: 'linear-gradient(to top, #327ab9 0%, #1a52a1 100%)',
-              padding: 0,
+      {/* Sidebar Card */}
+      <Card
+        sx={{
+          width: 280,
+          p: 2,
+          bgcolor: '#fafafa',
+          border: '1px solid #e0e0e0',
+          boxShadow: 3,
+          borderRadius: 2,
+          flexShrink: 0,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <Typography variant="h6" sx={{ mb: 2, fontWeight: 700, color: 'text.primary' }}>
+          🌍 Browse by Country
+        </Typography>
+
+        <TextField
+          size="small"
+          fullWidth
+          placeholder="Search countries"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          variant="outlined"
+          sx={{
+            mb: 2,
+            '& .MuiOutlinedInput-root': {
               borderRadius: 2,
-              color: 'white',
-            }}
-          >
-            <Tabs
-              value={selectedTab}
-              onChange={handleTabChange}
-              variant={isMobile ? 'scrollable' : 'fullWidth'}
-              scrollButtons={isMobile ? 'auto' : false}
-              textColor="inherit"
-              TabIndicatorProps={{ style: { backgroundColor: 'white', height: 3, borderRadius: 2 } }}
+              backgroundColor: 'white',
+            },
+          }}
+        />
+
+        {regionsData.map((region) => {
+          const visibleCountries = region.countries.filter(c =>
+            c.label.toLowerCase().includes(search.toLowerCase()) ||
+            c.value.toLowerCase().includes(search.toLowerCase())
+          );
+
+          if (visibleCountries.length === 0) return null;
+
+          return (
+            <Accordion
+              key={region.region}
+              disableGutters
+              elevation={0}
+              square
               sx={{
-                '& .MuiTab-root': {
-                  textTransform: 'none',
-                  fontWeight: 600,
-                  fontSize: '18px',
-                  mx: 0.5,
-                  py: 1,
-                  transition: 'color 0.3s ease',
-                  '&:hover': { color: '#e3f2fd' },
-                },
-                '& .Mui-selected': {
-                  color: 'white',
-                },
+                bgcolor: 'transparent',
+                mb: 1,
+                '&::before': { display: 'none' },
+                border: '1px solid',
+                borderColor: 'divider',
+                borderRadius: 2,
               }}
             >
-              {tabCountries.map((country) => (
-                <Tab key={country.value} label={country.label} />
-              ))}
-            </Tabs>
-          </Paper>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                sx={{
+                  px: 1.5,
+                  py: 1,
+                  '& .MuiAccordionSummary-content': {
+                    margin: 0,
+                    fontWeight: 600,
+                  },
+                }}
+              >
+                <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+                  {region.region}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails sx={{ px: 1.5, py: 1 }}>
+                <List dense>
+                  {visibleCountries.map((country) => {
+                    const selected = tabCountries.some(c => c.value === country.value);
+                    return (
+                      <ListItemButton
+                        key={country.value}
+                        selected={selected}
+                        onClick={() => handleCountrySelect(country)}
+                        sx={{
+                          borderRadius: 1,
+                          mb: 0.5,
+                          px: 1.5,
+                          py: 1,
+                          fontWeight: selected ? '600' : '400',
+                          color: selected ? 'primary.main' : 'text.primary',
+                          bgcolor: selected ? 'primary.light' : 'transparent',
+                          transition: 'all 0.2s ease',
+                          '&:hover': {
+                            bgcolor: selected ? 'primary.light' : 'action.hover',
+                          },
+                        }}
+                      >
+                        <ListItemText primary={country.label} />
+                      </ListItemButton>
+                    );
+                  })}
+                </List>
+              </AccordionDetails>
+            </Accordion>
+          );
+        })}
+      </Card>
 
-          <Fade in>
-            <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>{content}</Box>
-          </Fade>
 
-          {totalPages > 1 && (
-            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-              <Pagination
-                count={totalPages}
-                page={page}
-                onChange={handlePageChange}
-                color="primary"
-                shape="rounded"
-                siblingCount={isMobile ? 0 : 1}
-              />
-            </Box>
-          )}
-        </Box>
-      </Box>
-    </Card>
+      {/* Main Content */}
+      <Card
+        sx={{
+          flex: 1,
+          p: 2,
+          background: 'linear-gradient(to bottom right, #f0f4f8, #ffffff)',
+          border: '1px solid #e0e0e0',
+          boxShadow: 4,
+          borderRadius: 2,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <Paper
+          elevation={3}
+          sx={{
+            mb: 3,
+            background: 'linear-gradient(to top, #327ab9 0%, #1a52a1 100%)',
+            padding: 0,
+            borderRadius: 2,
+            color: 'white',
+          }}
+        >
+          <Tabs
+            value={selectedTab}
+            onChange={handleTabChange}
+            variant={isMobile ? 'scrollable' : 'fullWidth'}
+            scrollButtons={isMobile ? 'auto' : false}
+            textColor="inherit"
+            TabIndicatorProps={{ style: { backgroundColor: 'white', height: 3, borderRadius: 2 } }}
+            sx={{
+              '& .MuiTab-root': {
+                textTransform: 'none',
+                fontWeight: 600,
+                fontSize: '18px',
+                mx: 0.5,
+                py: 1,
+                transition: 'color 0.3s ease',
+                '&:hover': { color: '#e3f2fd' },
+              },
+              '& .Mui-selected': {
+                color: 'white',
+              },
+            }}
+          >
+            {tabCountries.map((country) => (
+              <Tab key={country.value} label={country.label} />
+            ))}
+          </Tabs>
+        </Paper>
+
+        <Fade in>
+          <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>{content}</Box>
+        </Fade>
+
+        {totalPages > 1 && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+            <Pagination
+              count={totalPages}
+              page={page}
+              onChange={handlePageChange}
+              color="primary"
+              shape="rounded"
+              siblingCount={isMobile ? 0 : 1}
+            />
+          </Box>
+        )}
+      </Card>
+    </Box>
+    // </Card>
   );
 }
 

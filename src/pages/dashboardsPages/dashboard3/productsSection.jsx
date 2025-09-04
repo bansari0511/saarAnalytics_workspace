@@ -1,6 +1,5 @@
-import { v4 as uuid } from 'uuid';
 import List from '@mui/material/List';
-import usersData from '@/_mocks/customers';
+import usersData from '@/_mocks/regionsData';
 import ListItem from '@mui/material/ListItem';
 import Tooltip from '@mui/material/Tooltip';
 import ListItemButton from '@mui/material/ListItemButton';

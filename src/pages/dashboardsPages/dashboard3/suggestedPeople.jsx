@@ -12,7 +12,7 @@ import PersonAddAlt1OutlinedIcon from '@mui/icons-material/PersonAddAlt1Outlined
 
 import CardHeader from '@/components/cardHeader';
 
-import usersData from '@/_mocks/customers';
+import usersData from '@/_mocks/regionsData';
 
 function SuggestedPeople() {
 	return (

@@ -12,7 +12,6 @@ async function mockNewsDetails(userId, reqId, docId) {
         that help unlock their full potential. Whether you're just getting started or looking to scale, our platform
         is designed to adapt to your needs.
       </p>
-
       <h2>Why Choose Us?</h2>
       <ul>
         <li><strong>User-Friendly:</strong> Simple interfaces designed for everyone.</li>

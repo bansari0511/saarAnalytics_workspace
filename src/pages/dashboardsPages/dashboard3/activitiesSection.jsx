@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 
 import CardHeader from '@/components/cardHeader';
-import customersData from '@/_mocks/customers';
+import customersData from '@/_mocks/regionsData';
 
 const ACTIVITIES_DATA = [
 	{
